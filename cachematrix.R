@@ -6,12 +6,27 @@
 ## This function creats a list of functions
 ## which are setters and getters for the inversion and chached matrix
 makeCacheMatrix <- function(x = matrix()) {
-
+	inv <- NULL
+	set <- function(y) {
+		x <<- y
+		inv <<- NULL
+	}
+	get <- function() x
+	setInverse <- function(inverse) inv <<- inverse
+	getInverse <- function() inv
+	list(set = set, get = get, setInverse = setInverse, getInverse = getInverse)
 }
 
 
-## Calculates the of a given matrix
+## Calculates the inversion of the given matrix
 ## In case the inversion has been calculated, it returns the cached matrix
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+	inv <- x$getInverse()
+	if(!is.null(inv)) {
+		return(inv)
+	}
+	data <- x$get()
+	inv <- solve(data)
+	x$setInverse(inv)
+	inv
 }
